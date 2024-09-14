@@ -1,5 +1,5 @@
 {
-  "name": "nitro-react",
+  "name": "@habforge/nitro",
   "version": "2.1.1",
   "homepage": ".",
   "private": true,
@@ -10,7 +10,7 @@
     "eslint": "eslint src --ext .ts,.tsx"
   },
   "dependencies": {
-    "@nitrots/nitro-renderer": "^1.6.6",
+    "@habforge/nitro-renderer": "^1.6.6",
     "@tanstack/react-virtual": "^3.0.0-alpha.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.2.2",

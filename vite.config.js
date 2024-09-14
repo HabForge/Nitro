@@ -8,7 +8,8 @@ export default defineConfig({
     resolve: {
         alias: {
             '@': resolve(__dirname, 'src'),
-            '~': resolve(__dirname, 'node_modules')
+            '~': resolve(__dirname, 'node_modules'),
+            '@nitrots/nitro-renderer': resolve(__dirname, 'node_modules/@habforge/nitro-renderer')
         }
     },
     build: {
