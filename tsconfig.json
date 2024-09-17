@@ -27,6 +27,6 @@
   },
   "include": [
     "src",
-    "node_modules/@nitrots/nitro-renderer/src/**/*.ts",
+    "node_modules/@habforge/nitro-renderer/src/**/*.ts",
   ]
 }
