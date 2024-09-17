@@ -20,7 +20,10 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "paths": {
+      "@nitrots/nitro-renderer": ["../node_modules/@habforge/nitro-renderer/index.ts"]
+    }
   },
   "include": [
     "src",

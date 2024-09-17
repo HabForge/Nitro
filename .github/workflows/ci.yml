@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  typescript:
+    name: Type checking
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        env:
+          cache-name: yarn-cache
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ env.cache-name }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+
+      - name: Build package
+        run: yarn build
+
+      - name: Run type checking
+        run: yarn tsc
+
+  artifacts:
+    name: Artifacts
+    needs: typescript
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        env:
+          cache-name: yarn-cache
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ env.cache-name }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Move config files
+        run: |
+          mv public/renderer-config.json.example public/renderer-config.json
+          mv public/ui-config.json.example public/ui-config.json
+
+      - name: Build
+        run: yarn build
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: Nitro
+          path: dist/**
