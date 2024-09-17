@@ -11,6 +11,7 @@ NitroVersion.UI_VERSION = GetUIVersion();
 export const App: FC<{}> = props =>
 {
     const [ isReady, setIsReady ] = useState(false);
+    const [ percent, setPercent ] = useState(0);
 
     useMessageEvent<LoadGameUrlEvent>(LoadGameUrlEvent, event =>
     {
@@ -48,6 +49,8 @@ export const App: FC<{}> = props =>
 
                 const assetUrls = GetConfiguration().getValue<string[]>('preload.assets.urls').map(url => GetConfiguration().interpolate(url)) ?? [];
 
+                setPercent(20);
+
                 await Promise.all(
                     [
                         GetAssetManager().downloadAssets(assetUrls),
@@ -59,8 +62,13 @@ export const App: FC<{}> = props =>
                     ]
                 );
 
+                setPercent(40);
                 await GetRoomEngine().init();
+
+                setPercent(60);
                 await GetCommunication().init();
+
+                setPercent(80);
 
                 // new GameMessageHandler();
 
@@ -74,6 +82,7 @@ export const App: FC<{}> = props =>
                 GetTicker().add(ticker => renderer.render(GetStage()));
                 GetTicker().add(ticker => GetTexturePool().run());
 
+                setPercent(100);
                 setIsReady(true);
 
                 // handle socket close
@@ -92,7 +101,7 @@ export const App: FC<{}> = props =>
     return (
         <Base fit overflow="hidden" className={ !(window.devicePixelRatio % 1) && 'image-rendering-pixelated' }>
             { !isReady &&
-                <LoadingView /> }
+                <LoadingView percent={ percent } /> }
             { isReady && <MainView /> }
             <Base id="draggable-windows-container" />
         </Base>
